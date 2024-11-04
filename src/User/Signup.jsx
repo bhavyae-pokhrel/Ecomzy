@@ -37,7 +37,7 @@ function SignUp() {
       }));
 
 
-   await axios.post("http://localhost:5000/api/v1/otp",{ email: data.email })
+   await axios.post("https://ecomzy-qy66.onrender.com/api/v1/otp",{ email: data.email })
     .then((response)=>{
       navigate("/verifyemail")
       toast.success(response.data.message)   

@@ -32,7 +32,7 @@ function loadScript(src) {
       }
   
      
-      const orderResponse = await axios.post('http://localhost:5000/api/v1/capturePayment',{cart},{headers: { Authorization: `Bearer ${token}`}} )
+      const orderResponse = await axios.post('https://ecomzy-qy66.onrender.com/api/v1/capturePayment',{cart},{headers: { Authorization: `Bearer ${token}`}} )
   
       if (!orderResponse.data.success) {
         throw new Error(orderResponse.data.message)
@@ -74,7 +74,7 @@ function loadScript(src) {
 
     const toastId = toast.loading("Verifying Payment...")
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/verifyPayment", bodyData,{ headers: { Authorization: `Bearer ${token}`}} )
+      const response = await axios.post("https://ecomzy-qy66.onrender.com/api/v1/verifyPayment", bodyData,{ headers: { Authorization: `Bearer ${token}`}} )
   
      console.log("VERIFY PAYMENT RESPONSE FROM BACKEND............", response)
   
@@ -96,7 +96,7 @@ function loadScript(src) {
   
   async function sendPaymentSuccessEmail(response, amount, token) {
     try {
-      await axios.post("http://localhost:5000/api/v1/sendPaymentSuccessEmail",
+      await axios.post("https://ecomzy-qy66.onrender.com/api/v1/sendPaymentSuccessEmail",
         { orderId: response.razorpay_order_id,paymentId: response.razorpay_payment_id,amount,},
         { headers: { Authorization: `Bearer ${token}` } }
       )

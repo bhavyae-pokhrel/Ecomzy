@@ -40,7 +40,7 @@ function VerifyEmail() {
   const sendOtp=async(event)=>{
     event.preventDefault();
 
-    await axios.post("http://localhost:5000/api/v1/otp",signupData.email)
+    await axios.post("https://ecomzy-qy66.onrender.com/api/v1/otp",signupData.email)
 
     .then((response)=>{
      console.log('VerifyEmail Response--->',response);
@@ -58,7 +58,7 @@ function VerifyEmail() {
     e.preventDefault();
   
     try {
-      const response = await axios.post("http://localhost:5000/api/v1/signup", formData, {
+      const response = await axios.post("https://ecomzy-qy66.onrender.com/api/v1/signup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

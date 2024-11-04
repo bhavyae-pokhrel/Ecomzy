@@ -24,7 +24,7 @@ function Login() {
     console.log("data-->", data);
 
     await axios
-      .post("http://localhost:5000/api/v1/login", data)
+      .post("https://ecomzy-qy66.onrender.com/api/v1/login", data)
 
       .then((response) => {
         console.log(response); //* Using this, Check where id present in API
