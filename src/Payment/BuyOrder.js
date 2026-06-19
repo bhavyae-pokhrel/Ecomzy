@@ -2,7 +2,9 @@ import { toast } from "react-hot-toast";
 import axios from "axios";
 import { empty } from "../redux/Slices/CartSlice";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL?.replace(/\/+$/, "") ||
+  "https://ecomzy-qy66.onrender.com/api/v1";
 
 function loadScript(src) {
   return new Promise((resolve) => {

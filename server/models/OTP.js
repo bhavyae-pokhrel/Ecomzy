@@ -19,21 +19,23 @@ const OTPSchema= mongoose.Schema({
 })
 
 const sendVerificationEmail = async (email, otp) => {
-    try {
-        const mailResponse = await mailSender(email, 'Verification Email', emailTemplate(otp));
-        console.log('mail Response--->', mailResponse.response);
-    } catch (error) {
-        console.log('mail error-->', error.message);
-        console.log('FULL OTP ERROR:', error); // ADD THIS 👇
-    }
+    const mailResponse = await mailSender(email, 'Verification Email', emailTemplate(otp));
+    console.log('mail Response--->', mailResponse.response);
 }
 
-OTPSchema.pre("save",async function (next){
-    if(this.isNew){
-       console.log('Preparing to send verification email:', { email: this.email, otp: this.otp });
-       await sendVerificationEmail(this.email,this.otp);
+OTPSchema.pre("save", async function (next) {
+    if (this.isNew) {
+        try {
+            console.log('Preparing to send verification email:', { email: this.email, otp: this.otp });
+            await sendVerificationEmail(this.email, this.otp);
+            next();
+        } catch (error) {
+            console.log('FULL OTP ERROR:', error);
+            next(error);
+        }
+    } else {
+        next();
     }
-    next();
-})  
+});
 
 module.exports=mongoose.model("OTP",OTPSchema)

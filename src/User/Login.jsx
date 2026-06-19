@@ -8,7 +8,9 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/Slices/authSlice";
 import { useForm } from "react-hook-form";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL?.replace(/\/+$/, "") ||
+  "https://ecomzy-qy66.onrender.com/api/v1";
 
 function Login() {
   const dispatch = useDispatch();
@@ -18,7 +20,6 @@ function Login() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({ mode: "onSubmit" });
 

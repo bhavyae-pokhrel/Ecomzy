@@ -9,7 +9,9 @@ import { setSignupData } from "../redux/Slices/authSlice";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL?.replace(/\/+$/, "") ||
+  "https://ecomzy-qy66.onrender.com/api/v1";
 
 function SignUp() {
   const dispatch = useDispatch();

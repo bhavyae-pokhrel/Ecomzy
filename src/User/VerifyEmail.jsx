@@ -9,7 +9,9 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/Slices/authSlice";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+const API_BASE_URL =
+  process.env.REACT_APP_API_URL?.replace(/\/+$/, "") ||
+  "https://ecomzy-qy66.onrender.com/api/v1";
 
 function VerifyEmail() {
   const dispatch = useDispatch();
@@ -32,10 +34,10 @@ function VerifyEmail() {
   console.log("VerifyData--->", VerifyData);
 
   useEffect(() => {
-    if (!signupData) {
+    if (!signupData?.email) {
       navigate("/signup");
     }
-  }, []);
+  }, [navigate, signupData]);
 
   const sendOtp = async (event) => {
     event.preventDefault();
