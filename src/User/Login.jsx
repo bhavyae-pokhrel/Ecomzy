@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../redux/Slices/authSlice";
 import { useForm } from "react-hook-form";
 
+const API_BASE_URL = process.env.REACT_APP_API_URL.replace(/\/+$/, "");
+
 function Login() {
   const dispatch = useDispatch();
   const [hidepassword, setHidePassword] = useState(true);
@@ -24,13 +26,13 @@ function Login() {
     console.log("data-->", data);
 
     await axios
-      .post("https://ecomzy-qy66.onrender.com/api/v1/login", data)
+      .post(`${API_BASE_URL}/login`, data)
 
       .then((response) => {
         console.log(response); //* Using this, Check where id present in API
         console.log(response.data.user._id);
-       //localStorage.setItem("id", response.data.user._id);
-       localStorage.setItem("token", response.data.token);
+        //localStorage.setItem("id", response.data.user._id);
+        localStorage.setItem("token", response.data.token);
         dispatch(login());
         navigate("/dashboard");
         toast.success(response.data.message);
@@ -50,6 +52,7 @@ function Login() {
           <input
             id="email"
             type="email"
+            placeholder="guest@gmail.com"
             {...register("email", { required: true })}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -66,6 +69,7 @@ function Login() {
           <div className="relative">
             <input
               id="password"
+              placeholder="guest@123"
               type={hidepassword ? "password" : "text"}
               {...register("password", {
                 required: true,

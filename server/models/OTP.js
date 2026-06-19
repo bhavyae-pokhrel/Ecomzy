@@ -10,7 +10,7 @@ const OTPSchema= mongoose.Schema({
     createAt:{
         type:Date,
         default:Date.now,
-        expire:60*5
+        expires:60*5
     },
     otp:{
         type:String,
@@ -18,13 +18,13 @@ const OTPSchema= mongoose.Schema({
     }
 })
 
-const sendVerificationEmail=async (email,otp)=>{
-    try{
-        const mailResponse= await mailSender(email,'Verification Email',emailTemplate(otp))
-        console.log('mail Response--->',mailResponse.response)
-    }
-    catch(error){
-        console.log('mail error-->',error.message);
+const sendVerificationEmail = async (email, otp) => {
+    try {
+        const mailResponse = await mailSender(email, 'Verification Email', emailTemplate(otp));
+        console.log('mail Response--->', mailResponse.response);
+    } catch (error) {
+        console.log('mail error-->', error.message);
+        console.log('FULL OTP ERROR:', error); // ADD THIS 👇
     }
 }
 
@@ -32,8 +32,8 @@ OTPSchema.pre("save",async function (next){
     if(this.isNew){
        console.log('Preparing to send verification email:', { email: this.email, otp: this.otp });
        await sendVerificationEmail(this.email,this.otp);
-       next();
     }
+    next();
 })  
 
 module.exports=mongoose.model("OTP",OTPSchema)
