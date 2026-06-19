@@ -1,54 +1,34 @@
-const nodemailer = require('nodemailer');
+// mailSender.js — HTTPS API version (works on Render free tier)
+// Uses Resend (https://resend.com) instead of raw SMTP, since Render's
+// free tier blocks outbound SMTP ports 25/465/587. HTTPS (443) is never blocked.
+
+const { Resend } = require('resend');
 require('dotenv').config();
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const mailSender = async (email, title, body) => {
   console.log('mailSender() started');
   console.log('mailSender target email:', email);
 
   try {
-    console.log('ENV CHECK:', {
-      host: process.env.MAIL_HOST,
-      user: process.env.MAIL_USER,
-      passExists: !!process.env.MAIL_PASS,
-    });
-
-    const normalizedPass = (process.env.MAIL_PASS || '').replace(/\s+/g, '');
-    console.log('Normalized password length:', normalizedPass.length);
-
-    console.log('Creating transporter...');
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: normalizedPass,
-      },
-      connectionTimeout: 15000,
-      greetingTimeout: 15000,
-      socketTimeout: 15000,
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-    console.log('Transporter created');
-
-    console.log('Running transporter.verify()...');
-    await transporter.verify();
-    console.log('Transporter verified successfully');
-
-    console.log('Sending mail...');
-    const info = await transporter.sendMail({
-      from: `"Ecomzy" <${process.env.MAIL_USER}>`,
-      to: email,
+    const { data, error } = await resend.emails.send({
+      from: `Ecomzy <${process.env.MAIL_FROM}>`, // e.g. onboarding@resend.dev for testing, or your verified domain
+      to: [email],
       subject: title,
       html: body,
     });
 
-    console.log('Mail send result:', info.response);
-    return info;
+    if (error) {
+      console.log('Resend API error:', error);
+      throw new Error(error.message || 'Failed to send email via Resend');
+    }
+
+    console.log('Mail sent successfully, id:', data.id);
+    return data;
   } catch (error) {
     console.log('mailSender catch block reached');
     console.log('MAIL ERROR message:', error.message);
-    console.log('MAIL ERROR full object:', error);
     throw error;
   }
 };
