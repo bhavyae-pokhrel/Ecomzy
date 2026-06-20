@@ -20,8 +20,8 @@ exports.capturePayment = async (req, res) => {
   
 
   const options = {
-    amount: Math.round(total_amount * 10000),    
-    currency: "USD",
+    amount: Math.round(total_amount * 10000), //! 2 zero USD-> IND and 2 zero because Razorpay treact prices as paisa
+    currency: "INR",
     receipt: Math.random(Date.now()).toString(),
   }
 
